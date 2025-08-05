@@ -13,10 +13,18 @@
     "type-check": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["shopify", "gmv", "supabase", "typescript", "express"],
+  "keywords": [
+    "shopify",
+    "gmv",
+    "supabase",
+    "typescript",
+    "express"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@shopify/admin-api-client": "^1.1.1",
+    "@shopify/shopify-api": "^11.14.1",
     "@supabase/supabase-js": "^2.53.0",
     "axios": "^1.11.0",
     "compression": "^1.8.1",
@@ -26,6 +34,7 @@
     "helmet": "^8.1.0",
     "morgan": "^1.10.1",
     "node-cron": "^4.2.1",
+    "node-fetch": "^3.3.2",
     "pg": "^8.16.3",
     "sequelize": "^6.37.7"
   },
@@ -35,6 +44,7 @@
     "@types/express": "^5.0.3",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.1.0",
+    "@types/node-fetch": "^2.6.13",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"

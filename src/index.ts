@@ -7,6 +7,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import { initializeDatabase, closeConnection } from "./db/db.js";
 import { startOrderSyncScheduler } from "./utils/scheduler.js";
+import routes from "./routes/index.routes.js";
 
 // Load environment variables
 dotenv.config();
@@ -66,8 +67,8 @@ app.get("/health", (_req, res) => {
   });
 });
 
-// API routes will be mounted here
-// TODO: Add route handlers for GMV endpoints
+// API routes
+app.use("/api", routes);
 
 // 404 handler
 app.use("*", (req, res) => {

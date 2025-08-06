@@ -1,10 +1,13 @@
 import type { ShopifyOrder } from "./types";
 import * as shopifyService from "@/services/shopify.services";
 import { createOrder } from "@/services/order.services";
-import type Order from "@/models/Order";
+import type { Order, Key } from "@/models";
+import { getAllActiveKeys } from "@/services/key.services";
 
-export const fetchAndCreateOrders = async (): Promise<{ amount: number, created: Order[]}> => {
-  const orders: ShopifyOrder[] = await shopifyService.fetchAllOrders();
+export const fetchAndCreateOrders = async (
+  client: Key
+): Promise<{ amount: number; created: Order[] }> => {
+  const orders: ShopifyOrder[] = await shopifyService.fetchAllOrders(client);
   const ordersOnDB = await Promise.all(
     orders.map(async (order) => {
       const { order: createdOrder, created } = await createOrder({
@@ -25,8 +28,16 @@ export const fetchAndCreateOrders = async (): Promise<{ amount: number, created:
   return createdOrders;
 };
 
-export const fetchAndCreateOrdersByDateRange = async (startDate: Date, endDate: Date): Promise<{ amount: number, created: Order[]}> => {
-  const orders: ShopifyOrder[] = await shopifyService.fetchOrdersByDateRange(startDate, endDate);
+export const fetchAndCreateOrdersByDateRange = async (
+  client: Key,
+  startDate: Date,
+  endDate: Date
+): Promise<{ amount: number; created: Order[] }> => {
+  const orders: ShopifyOrder[] = await shopifyService.fetchOrdersByDateRange(
+    client,
+    startDate,
+    endDate
+  );
   const ordersOnDB = await Promise.all(
     orders.map(async (order) => {
       const { order: createdOrder, created } = await createOrder({
@@ -45,4 +56,15 @@ export const fetchAndCreateOrdersByDateRange = async (startDate: Date, endDate: 
       .map((order) => order.createdOrder),
   };
   return createdOrders;
+};
+
+export const loopForScheduler = async (startDate: Date, endDate: Date) => {
+  const clients = await getAllActiveKeys();
+  for (const client of clients) {
+    await fetchAndCreateOrdersByDateRange(
+      client,
+      startDate,
+      endDate
+    );
+  }
 };

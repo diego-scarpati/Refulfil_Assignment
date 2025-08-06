@@ -2,9 +2,10 @@ import type { Request, Response } from "express";
 import { createKey } from "../services/key.services.js";
 
 export const createKeyController = async (req: Request, res: Response) => {
-  const { merchant_id, api_key, api_secret_key, host_name, access_token } =
+  const { merchant_id, shop_domain, api_key, api_secret_key, host_name, access_token } =
     req.body as {
       merchant_id: string;
+      shop_domain: string;
       api_key: string;
       api_secret_key: string;
       host_name: string;
@@ -13,6 +14,7 @@ export const createKeyController = async (req: Request, res: Response) => {
 
   if (
     !merchant_id ||
+    !shop_domain ||
     !api_key ||
     !api_secret_key ||
     !host_name ||
@@ -24,6 +26,7 @@ export const createKeyController = async (req: Request, res: Response) => {
   try {
     const newKey = await createKey({
       merchant_id,
+      shop_domain,
       api_key,
       api_secret_key,
       host_name,

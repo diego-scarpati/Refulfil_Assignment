@@ -4,7 +4,7 @@
  */
 
 import cron from "node-cron";
-import { fetchAndCreateOrdersByDateRange } from "./orderCreator.js";
+import { loopForScheduler } from "./orderCreator.js";
 
 /**
  * Start the cron job to fetch orders periodically
@@ -36,7 +36,7 @@ export const startOrderSyncScheduler = (): void => {
           endDate.getTime() - 60 * 60 * 1000
         ); // 1 hour ago
 
-        await fetchAndCreateOrdersByDateRange(startDate, endDate);
+        await loopForScheduler(startDate, endDate);
         console.log("✅ Scheduled order sync completed successfully");
       } catch (error) {
         console.error("❌ Error in scheduled order sync:", error);

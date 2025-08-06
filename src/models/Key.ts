@@ -10,8 +10,13 @@ Key.init(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+    shop_domain: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
     merchant_id: {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },

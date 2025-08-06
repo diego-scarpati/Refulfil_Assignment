@@ -10,6 +10,18 @@ export const getAllKeys = async (): Promise<Key[]> => {
   }
 };
 
+export const getAllActiveKeys = async (): Promise<Key[]> => {
+  try {
+    const keys = await Key.findAll({
+      where: { is_active: true },
+    });
+    return keys;
+  } catch (error) {
+    console.error("Error fetching keys:", error);
+    throw error;
+  }
+};
+
 export const getKeyById = async (id: string): Promise<Key> => {
   try {
     const key = await Key.findByPk(id);
@@ -21,7 +33,7 @@ export const getKeyById = async (id: string): Promise<Key> => {
     console.error("Error fetching key:", error);
     throw error;
   }
-}
+};
 
 export const getKeyByMerchantId = async (merchantId: string): Promise<Key> => {
   try {
@@ -36,10 +48,11 @@ export const getKeyByMerchantId = async (merchantId: string): Promise<Key> => {
     console.error("Error fetching key by merchant ID:", error);
     throw error;
   }
-}
+};
 
 export const createKey = async (data: {
   merchant_id: string;
+  shop_domain: string;
   api_key: string;
   api_secret_key: string;
   host_name: string;

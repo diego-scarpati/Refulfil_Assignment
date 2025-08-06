@@ -7,7 +7,7 @@ import type {
   OrdersResponse,
   ShopifyOrder,
   FetchOrdersOptions,
-} from "../utils/shopify/queries.js";
+} from "../utils/types.js";
 
 /**
  * Fetch all orders from a Shopify merchant

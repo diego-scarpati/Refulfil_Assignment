@@ -11,7 +11,7 @@ Order.init(
       primaryKey: true,
     },
     shopify_order_id: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
@@ -19,7 +19,7 @@ Order.init(
       type: DataTypes.DECIMAL,
       allowNull: false,
     },
-    created_at: {
+    created_at_by_shopify: {
       type: DataTypes.DATE,
       allowNull: false,
     },
@@ -27,7 +27,7 @@ Order.init(
   {
     tableName: "orders",
     modelName: "Order",
-    timestamps: false,
+    timestamps: true,
     sequelize,
   }
 );

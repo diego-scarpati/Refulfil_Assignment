@@ -11,11 +11,11 @@ Merchant.init(
       primaryKey: true,
     },
     name: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     shopify_id: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },

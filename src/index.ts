@@ -6,6 +6,7 @@ import compression from "compression";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import { initializeDatabase, closeConnection } from "./db/db.js";
+import { startOrderSyncScheduler } from "./utils/scheduler.js";
 
 // Load environment variables
 dotenv.config();
@@ -96,6 +97,9 @@ app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
     // Initialize database connection
     console.log("🔄 Initializing database connection...");
     await initializeDatabase();
+
+    // Cron scheduler for periodic tasks
+    startOrderSyncScheduler();
 
     // Start the server
     const server = app.listen(port, () => {

@@ -1,4 +1,5 @@
 import { Order } from "@/models";
+import type { OrderCreatorObject } from "@/utils/types";
 import { Op } from "sequelize";
 
 export const getAllOrders = async (): Promise<Order[]> => {
@@ -79,16 +80,11 @@ export const getMerchantOrdersAmount = async (
   }
 };
 
-export const createOrder = async (data: {
-  shopify_order_id: string;
-  total_price: number;
-  created_at: Date;
-  merchant_id: string;
-}): Promise<{ order: Order; created: boolean }> => {
+export const createOrder = async (data: OrderCreatorObject): Promise<{ order: Order; created: boolean }> => {
   try {
     const [order, created] = await Order.findOrCreate({
       where: { shopify_order_id: data.shopify_order_id },
-      defaults: data,
+      defaults: data as any,
     });
     return { order: order, created };
   } catch (error) {

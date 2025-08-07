@@ -4,11 +4,12 @@ import {
 } from "../utils/shopify/queries.js";
 import type {
   OrdersResponse,
-  ShopifyOrder,
   FetchOrdersOptions,
+  NewOrder,
 } from "../utils/types.js";
 import { createShopifyClient } from "../config/shopify.js";
 import type { Key } from "@/models/";
+import { mapShopifyToNewOrders } from "@/utils/shopify/helperFunctions.js";
 
 /**
  * Fetch all orders from a Shopify merchant
@@ -17,9 +18,9 @@ import type { Key } from "@/models/";
 export const fetchAllOrders = async (
   client: Key,
   options: FetchOrdersOptions = {}
-): Promise<ShopifyOrder[]> => {
+): Promise<NewOrder[]> => {
   const { first = 250, after, createdAtMin, createdAtMax } = options;
-  const allOrders: ShopifyOrder[] = [];
+  const allOrders: NewOrder[] = [];
   let hasNextPage = true;
   let cursor = after || null;
 
@@ -27,42 +28,37 @@ export const fetchAllOrders = async (
 
   try {
     while (hasNextPage) {
-      const query =
-        createdAtMin && createdAtMax
-          ? FETCH_ORDERS_BY_DATE_RANGE_QUERY
-          : FETCH_ORDERS_QUERY;
+    // pick the right query
+    const query =
+      createdAtMin && createdAtMax
+        ? FETCH_ORDERS_BY_DATE_RANGE_QUERY
+        : FETCH_ORDERS_QUERY;
 
-      const variables = {
-        first,
-        after: cursor,
-        ...(createdAtMin && { createdAtMin }),
-        ...(createdAtMax && { createdAtMax }),
-      };
+    const variables = {
+      first,
+      after: cursor,
+      ...(createdAtMin && { createdAtMin }),
+      ...(createdAtMax && { createdAtMax }),
+    };
 
-      // const response = await adminApiClient.request<OrdersResponse>(query, {
-      //   variables,
-      // });
+    // fetch a page
+    const response = await shopifyClient.query<OrdersResponse>({
+      data: { query, variables },
+    });
+    const body = response.body;
+    if (!body?.orders) break;
 
-      const response = await shopifyClient.query<OrdersResponse>({
-        data: {
-          query,
-          variables,
-        },
-      });
+    // map that page into NewOrder[], each with its items[]
+    const { orders: pageOrders } = mapShopifyToNewOrders(body, client.dataValues.merchant_id);
+    allOrders.push(...pageOrders);
 
-      if (response.body?.orders) {
-        const orders = response.body.orders.edges.map((edge) => edge.node);
-        allOrders.push(...orders);
+    // advance pagination
+    hasNextPage = body.orders.pageInfo.hasNextPage;
+    cursor      = body.orders.pageInfo.endCursor;
 
-        hasNextPage = response.body.orders.pageInfo.hasNextPage;
-        cursor = response.body.orders.pageInfo.endCursor;
-      } else {
-        hasNextPage = false;
-      }
-
-      // Add delay to respect rate limits
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    }
+    // rate-limit courtesy
+    await new Promise((r) => setTimeout(r, 500));
+  }
 
     console.log(`✅ Fetched ${allOrders.length} orders from Shopify`);
     return allOrders;
@@ -87,7 +83,7 @@ export const fetchOrdersByDateRange = async (
   startDate: Date,
   endDate: Date,
   options: Omit<FetchOrdersOptions, "createdAtMin" | "createdAtMax"> = {}
-): Promise<ShopifyOrder[]> => {
+): Promise<NewOrder[]> => {
   return fetchAllOrders(client, {
     ...options,
     createdAtMin: startDate.toISOString(),
@@ -102,7 +98,7 @@ export const fetchOrdersByDateRange = async (
 export const fetchRecentOrders = async (
   client: Key,
   days: number = 30
-): Promise<ShopifyOrder[]> => {
+): Promise<NewOrder[]> => {
   const endDate = new Date();
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - days);

@@ -36,6 +36,17 @@ export const FETCH_ORDERS_QUERY = `
                     currencyCode
                   }
                 }
+                totalDiscountSet {
+                  shopMoney {
+                    amount
+                    currencyCode
+                  }
+                }
+                variant {
+                  id
+                  sku
+                  product { id }
+                }
               }
             }
             pageInfo {
@@ -99,6 +110,17 @@ export const FETCH_ORDERS_BY_DATE_RANGE_QUERY = `
                     currencyCode
                   }
                 }
+                totalDiscountSet {
+                  shopMoney {
+                    amount
+                    currencyCode
+                  }
+                }
+                variant {
+                  id
+                  sku
+                  product { id }
+                }                
               }
             }
             pageInfo {

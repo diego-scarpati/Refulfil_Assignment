@@ -23,6 +23,11 @@ Order.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    financial_status: { type: DataTypes.STRING },
+    fulfillment_status: { type: DataTypes.STRING },
+    processed_at: { type: DataTypes.DATE },
+    updated_at_by_shopify: { type: DataTypes.DATE },
+    shopify_name: { type: DataTypes.STRING }, // e.g. “#1001”
   },
   {
     tableName: "orders",

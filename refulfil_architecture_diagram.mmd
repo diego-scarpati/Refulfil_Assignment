@@ -1,0 +1,9 @@
+graph LR
+    A[Fetch Scheduler<br>Cron, every 30 min] -->|Fetch Orders<br>GraphQL| B[Shopify API<br>GraphQL, Pagination]
+    B -->|Store Orders| C[Supabase DB<br>PostgreSQL]
+    C -->|Query/Store Data| D[Internal API<br>Express, REST]
+    D -->|Serve GMV/AOV| E[Frontend/Client]
+    subgraph Backend
+        C[Supabase DB<br>Tables: merchants, keys, orders, order_items]
+        D[Internal API<br>Endpoints: /api/merchants/:id/gmv, /api/orders]
+    end

@@ -1,0 +1,55 @@
+erDiagram
+    KEYS {
+        UUID id PK "default: uuidv4"
+        STRING shop_domain "unique, not null"
+        STRING merchant_id "unique, not null"
+        STRING api_key "not null"
+        STRING api_secret_key "not null"
+        STRING host_name "not null"
+        STRING access_token "not null"
+        BOOLEAN valid "default: false, not null"
+    }
+
+    MERCHANTS {
+        UUID id PK "default: uuidv4"
+        STRING name "not null"
+        STRING shopify_id "unique, not null"
+        STRING partner_id "not null"
+        STRING store_name "not null"
+        ENUM plan_type "Basic | Shopify | Advanced | Plus | Enterprise; default: Basic"
+        DATE acquisition_date "default: now, not null"
+        BOOLEAN collaborator_access "default: false, not null"
+    }
+
+    ORDERS {
+        UUID id PK "default: uuidv4"
+        UUID merchant_id FK "references MERCHANTS.id"
+        STRING shopify_order_id "unique, not null"
+        DECIMAL total_price "not null"
+        DATE created_at_by_shopify "not null"
+        STRING financial_status
+        STRING fulfillment_status
+        DATE processed_at
+        DATE updated_at_by_shopify
+        STRING shopify_name
+    }
+
+    ORDER_ITEMS {
+        UUID id PK "default: uuidv4"
+        UUID order_id FK "references ORDERS.id"
+        STRING shopify_line_item_id "unique, not null"
+        STRING product_id
+        STRING variant_id
+        STRING name "not null"
+        STRING sku
+        INTEGER quantity "not null"
+        DECIMAL unit_price "12,4; not null"
+        DECIMAL total_price "14,4; not null"
+        DECIMAL total_discount "14,4; default: 0.00; not null"
+        DECIMAL total_tax "14,4; default: 0.00; not null"
+        STRING currency_code "length: 3; not null"
+        DATE created_at_by_shopify "not null"
+    }
+
+    MERCHANTS ||--o{ ORDERS : "has many"
+    ORDERS ||--o{ ORDER_ITEMS : "has many"

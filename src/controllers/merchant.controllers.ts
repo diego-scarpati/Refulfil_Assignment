@@ -46,3 +46,59 @@ export const createMerchant = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const getMerchantGMV = async (req: Request, res: Response) => {
+  const { id } = req.params as { id: string };
+  const { startDate, endDate } = req.query as {
+    startDate?: string;
+    endDate?: string;
+  };
+
+  try {
+    const result =
+      startDate && endDate
+        ? await merchantServices.getMerchantGMVByDateRange(
+            id,
+            new Date(startDate),
+            new Date(endDate)
+          )
+        : await merchantServices.getMerchantGMV(id);
+
+    return res.json(result);
+  } catch (error) {
+    console.error(`Error fetching GMV for merchant ${id}:`, error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getAllGMV = async (req: Request, res: Response) => {
+  const { startDate, endDate } = req.query as {
+    startDate?: string;
+    endDate?: string;
+  };
+
+  try {
+    const result =
+      startDate && endDate
+        ? await merchantServices.getAllGMVByDateRange(
+            new Date(startDate),
+            new Date(endDate)
+          )
+        : await merchantServices.getAllGMV();
+
+    return res.json(result);
+  } catch (error) {
+    console.error("Error fetching GMV:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getAllMerchantsWithGMV = async (_req: Request, res: Response) => {
+  try {
+    const merchants = await merchantServices.getAllMerchantsWithGMV();
+    return res.json(merchants);
+  } catch (error) {
+    console.error("Error fetching merchants with GMV:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};

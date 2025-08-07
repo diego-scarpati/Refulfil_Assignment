@@ -1,0 +1,31 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="U6VyfNTqunp1UcTycL7p" name="ERD">
+    <mxGraphModel dx="1420" dy="776" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="merchant" value="Merchant&#xa;id (PK)&#xa;name&#xa;shopify_id&#xa;partner_id&#xa;store_name&#xa;plan_type&#xa;acquisition_date&#xa;collaborator_access&#xa;created_at&#xa;updated_at" style="whiteSpace=wrap;html=1;rounded=0;align=left;labelBackgroundColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="60" y="60" width="220" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="key" value="Key&#xa;id (PK)&#xa;shop_domain&#xa;merchant_id&#xa;api_key&#xa;api_secret_key&#xa;host_name&#xa;access_token&#xa;valid&#xa;created_at&#xa;updated_at" style="whiteSpace=wrap;html=1;rounded=0;align=left;labelBackgroundColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="60" y="320" width="220" height="230" as="geometry"/>
+        </mxCell>
+        <mxCell id="order" value="Order&#xa;id (PK)&#xa;merchant_id (FK)&#xa;shopify_order_id&#xa;total_price&#xa;created_at_by_shopify&#xa;financial_status&#xa;fulfillment_status&#xa;processed_at&#xa;updated_at_by_shopify&#xa;shopify_name&#xa;created_at&#xa;updated_at" style="whiteSpace=wrap;html=1;rounded=0;align=left;labelBackgroundColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="350" y="80" width="240" height="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="orderitem" value="OrderItem&#xa;id (PK)&#xa;order_id (FK)&#xa;shopify_line_item_id&#xa;product_id&#xa;variant_id&#xa;name&#xa;sku&#xa;quantity&#xa;unit_price&#xa;total_price&#xa;total_discount&#xa;total_tax&#xa;currency_code&#xa;created_at_by_shopify&#xa;created_at&#xa;updated_at" style="whiteSpace=wrap;html=1;rounded=0;align=left;labelBackgroundColor=#f8cecc;" vertex="1" parent="1">
+          <mxGeometry x="660" y="100" width="260" height="320" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge1" value="" style="endArrow=block;endFill=1;strokeWidth=2;" edge="1" parent="1" source="merchant" target="order">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge2" value="" style="endArrow=block;endFill=1;strokeWidth=2;" edge="1" parent="1" source="order" target="orderitem">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge3" value="" style="endArrow=block;endFill=1;strokeWidth=2;" edge="1" parent="1" source="merchant" target="key">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

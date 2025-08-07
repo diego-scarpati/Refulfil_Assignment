@@ -1,4 +1,4 @@
-import { Merchant, Order } from "@/models";
+import { Merchant, Order, OrderItem } from "@/models";
 import * as orderService from "./order.services.js";
 
 export const getAllMerchants = async (): Promise<Merchant[]> => {
@@ -84,6 +84,35 @@ export const createMerchant = async (data: {
     return merchant;
   } catch (error) {
     console.error("Error creating merchant:", error);
+    throw error;
+  }
+};
+
+export const getMerchantGMV = async (
+  merchantId: string
+): Promise<number> => {
+  try {
+    const orderItems = await OrderItem.findAll({
+      include: [
+        {
+          model: Order,
+          as: "order",
+          attributes: [],
+          where: { merchant_id: merchantId },
+        },
+      ],
+    });
+
+    const gmv = orderItems.reduce((sum, item) => {
+      const price = parseFloat(item.dataValues.total_price);
+      const tax = parseFloat(item.dataValues.total_tax);
+      const discount = parseFloat(item.dataValues.total_discount);
+      return sum + price + tax - discount;
+    }, 0);
+
+    return gmv;
+  } catch (error) {
+    console.error("Error calculating merchant GMV:", error);
     throw error;
   }
 };

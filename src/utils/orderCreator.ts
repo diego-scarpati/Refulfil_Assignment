@@ -9,6 +9,11 @@ import { createOrderItem } from "@/services/orderItem.services";
 import type { Order, Key } from "@/models";
 import { getAllActiveKeys } from "@/services/key.services";
 
+/**
+ * Fetch all orders for a given Shopify client and persist them with their line items.
+ * @param client - Merchant API key configuration.
+ * @returns The number of newly created orders and the records themselves.
+ */
 export const fetchAndCreateOrders = async (
   client: Key
 ): Promise<{ amount: number; created: Order[] }> => {
@@ -58,6 +63,12 @@ export const fetchAndCreateOrders = async (
   return createdOrders;
 };
 
+/**
+ * Fetch orders within a date range for a client and persist them.
+ * @param client - Merchant API key configuration.
+ * @param startDate - Start of the period.
+ * @param endDate - End of the period.
+ */
 export const fetchAndCreateOrdersByDateRange = async (
   client: Key,
   startDate: Date,
@@ -113,6 +124,9 @@ export const fetchAndCreateOrdersByDateRange = async (
   return createdOrders;
 };
 
+/**
+ * Iterate through all active merchants and import their orders for the scheduler window.
+ */
 export const loopForScheduler = async (startDate: Date, endDate: Date) => {
   const clients = await getAllActiveKeys();
   for (const client of clients) {

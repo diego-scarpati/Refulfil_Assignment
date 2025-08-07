@@ -1,5 +1,11 @@
 import type { NewOrder, OrdersResponse, OrderItemAttributes } from "../types";
 
+/**
+ * Convert the Shopify GraphQL order response into a list of {@link NewOrder} objects
+ * along with their nested line items.
+ * @param data - Raw GraphQL response from Shopify.
+ * @param merchantId - Merchant identifier to attach to each order.
+ */
 export function mapShopifyToNewOrders(
   data: OrdersResponse,
   merchantId: string

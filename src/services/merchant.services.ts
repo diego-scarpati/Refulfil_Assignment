@@ -2,6 +2,10 @@ import { Merchant, Order, OrderItem } from "@/models";
 import * as orderService from "./order.services.js";
 import { Op } from "sequelize";
 
+/**
+ * Retrieve every merchant in the system.
+ * @returns A list of {@link Merchant} records.
+ */
 export const getAllMerchants = async (): Promise<Merchant[]> => {
   try {
     const merchants = await Merchant.findAll();
@@ -11,6 +15,12 @@ export const getAllMerchants = async (): Promise<Merchant[]> => {
     throw error;
   }
 };
+/**
+ * Fetch a merchant by database identifier.
+ * @param id - UUID of the merchant.
+ * @returns The matching {@link Merchant} record.
+ * @throws If the merchant does not exist.
+ */
 export const getMerchantById = async (id: string): Promise<Merchant> => {
   try {
     const merchant = await Merchant.findByPk(id);
@@ -24,6 +34,12 @@ export const getMerchantById = async (id: string): Promise<Merchant> => {
   }
 };
 
+/**
+ * Retrieve a merchant by its Shopify store identifier.
+ * @param shopifyId - The Shopify merchant id.
+ * @returns The matching {@link Merchant} record.
+ * @throws If the merchant cannot be found.
+ */
 export const getMerchantByShopifyId = async (
   shopifyId: string
 ): Promise<Merchant> => {
@@ -41,6 +57,14 @@ export const getMerchantByShopifyId = async (
   }
 };
 
+/**
+ * Calculate the total order value and number of orders for a merchant.
+ * Optionally constrained to a date range.
+ * @param merchantId - Merchant identifier.
+ * @param startDate - Optional start date.
+ * @param endDate - Optional end date.
+ * @returns Totals for value and order count.
+ */
 export const getMerchantOrdersAmount = async (
   merchantId: string,
   startDate?: Date,
@@ -60,6 +84,11 @@ export const getMerchantOrdersAmount = async (
   }
 };
 
+/**
+ * Retrieve all orders for a given merchant including their items.
+ * @param merchantId - Merchant identifier.
+ * @returns Merchant records with associated orders.
+ */
 export const getAllMerchantOrders = async (merchantId: string) => {
   try {
     const merchants = await Merchant.findAll({
@@ -76,6 +105,11 @@ export const getAllMerchantOrders = async (merchantId: string) => {
   }
 };
 
+/**
+ * Create a new merchant record.
+ * @param data - Merchant attributes.
+ * @returns The created {@link Merchant} instance.
+ */
 export const createMerchant = async (data: {
   name: string;
   shopify_id: string;
@@ -89,6 +123,11 @@ export const createMerchant = async (data: {
   }
 };
 
+/**
+ * Compute GMV and AOV metrics for a merchant.
+ * @param merchantId - Merchant identifier.
+ * @returns Gross merchandise value and average order value.
+ */
 export const getMerchantGMV = async (
   merchantId: string
 ): Promise<{ gmv: number; aov: number }> => {
@@ -120,6 +159,12 @@ export const getMerchantGMV = async (
   }
 };
 
+/**
+ * Compute GMV and AOV for a merchant within a specific date range.
+ * @param merchantId - Merchant identifier.
+ * @param startDate - Start date of the range.
+ * @param endDate - End date of the range.
+ */
 export const getMerchantGMVByDateRange = async (
   merchantId: string,
   startDate: Date,
@@ -157,6 +202,10 @@ export const getMerchantGMVByDateRange = async (
   }
 };
 
+/**
+ * Compute GMV and AOV across all merchants.
+ * @returns Aggregated GMV and AOV.
+ */
 export const getAllGMV = async (): Promise<{ gmv: number; aov: number }> => {
   try {
     const orderItems = await OrderItem.findAll({
@@ -185,6 +234,11 @@ export const getAllGMV = async (): Promise<{ gmv: number; aov: number }> => {
   }
 };
 
+/**
+ * Compute GMV and AOV across all merchants for a given period.
+ * @param startDate - Start date of the range.
+ * @param endDate - End date of the range.
+ */
 export const getAllGMVByDateRange = async (
   startDate: Date,
   endDate: Date
@@ -220,7 +274,10 @@ export const getAllGMVByDateRange = async (
   }
 };
 
-// A function that returns an array of merchants with their GMV
+/**
+ * Retrieve every merchant with its computed GMV and AOV.
+ * @returns Array of merchants and their metrics.
+ */
 export const getAllMerchantsWithGMV = async (): Promise<
   Array<{ merchant: Merchant; gmv: number; aov: number }>
 > => {

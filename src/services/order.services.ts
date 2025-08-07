@@ -2,6 +2,10 @@ import { Order } from "@/models";
 import type { OrderCreatorObject } from "@/utils/types";
 import { Op } from "sequelize";
 
+/**
+ * Retrieve all orders in the database.
+ * @returns A list of {@link Order} records.
+ */
 export const getAllOrders = async (): Promise<Order[]> => {
   try {
     const orders = await Order.findAll();
@@ -12,6 +16,12 @@ export const getAllOrders = async (): Promise<Order[]> => {
   }
 };
 
+/**
+ * Fetch a single order by its database identifier.
+ * @param id - UUID of the order.
+ * @returns The matching {@link Order} instance.
+ * @throws If the order does not exist.
+ */
 export const getOrderById = async (id: string): Promise<Order> => {
   try {
     const order = await Order.findByPk(id);
@@ -25,6 +35,12 @@ export const getOrderById = async (id: string): Promise<Order> => {
   }
 };
 
+/**
+ * Retrieve an order using its Shopify order id.
+ * @param shopifyOrderId - Shopify's order identifier.
+ * @returns The matching {@link Order} instance.
+ * @throws If the order cannot be found.
+ */
 export const getOrderByShopifyOrderId = async (
   shopifyOrderId: string
 ): Promise<Order> => {
@@ -44,6 +60,10 @@ export const getOrderByShopifyOrderId = async (
   }
 };
 
+/**
+ * Get the most recently created order.
+ * @returns The newest {@link Order} or null if none exist.
+ */
 export const getLastOrder = async (): Promise<Order | null> => {
   try {
     const order = await Order.findOne({
@@ -56,6 +76,12 @@ export const getLastOrder = async (): Promise<Order | null> => {
   }
 };
 
+/**
+ * Calculate total order value and count for a merchant within an optional date range.
+ * @param merchantId - Merchant identifier.
+ * @param startDate - Start of the period.
+ * @param endDate - End of the period.
+ */
 export const getMerchantOrdersAmount = async (
   merchantId: string,
   startDate?: Date,
@@ -80,6 +106,11 @@ export const getMerchantOrdersAmount = async (
   }
 };
 
+/**
+ * Create a new order if it does not already exist.
+ * @param data - Attributes describing the order to create.
+ * @returns The created or existing {@link Order} and a flag indicating creation.
+ */
 export const createOrder = async (data: OrderCreatorObject): Promise<{ order: Order; created: boolean }> => {
   try {
     const [order, created] = await Order.findOrCreate({

@@ -19,6 +19,29 @@ Merchant.init(
       allowNull: false,
       unique: true,
     },
+    partner_id: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    store_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    plan_type: {
+      type: DataTypes.ENUM("Basic", "Shopify", "Advanced", "Plus", "Enterprise"),
+      allowNull: false,
+      defaultValue: "Basic",
+    },
+    acquisition_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    collaborator_access: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     tableName: "merchants",

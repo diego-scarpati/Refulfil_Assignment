@@ -1,6 +1,9 @@
 import type { Request, Response } from "express";
 import * as orderServices from "../services/order.services.js";
 
+/**
+ * Return every order in the database.
+ */
 export const getAllOrders = async (_req: Request, res: Response) => {
   try {
     const orders = await orderServices.getAllOrders();
@@ -11,6 +14,9 @@ export const getAllOrders = async (_req: Request, res: Response) => {
   }
 };
 
+/**
+ * Retrieve a single order by its database identifier.
+ */
 export const getOrderById = async (req: Request, res: Response) => {
   const { id } = req.params as { id: string };
   try {
@@ -22,6 +28,9 @@ export const getOrderById = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Retrieve an order using its Shopify order ID.
+ */
 export const getOrderByShopifyOrderId = async (req: Request, res: Response) => {
   const { shopifyOrderId } = req.params as { shopifyOrderId: string };
   try {
@@ -36,6 +45,9 @@ export const getOrderByShopifyOrderId = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Return the most recently created order.
+ */
 export const getLastOrder = async (_req: Request, res: Response) => {
   try {
     const order = await orderServices.getLastOrder();
@@ -49,6 +61,9 @@ export const getLastOrder = async (_req: Request, res: Response) => {
   }
 };
 
+/**
+ * Create a new order record.
+ */
 export const createOrder = async (req: Request, res: Response) => {
   const { shopify_order_id, total_price, created_at, merchant_id } =
     req.body as {

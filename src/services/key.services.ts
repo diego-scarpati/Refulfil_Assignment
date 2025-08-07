@@ -1,5 +1,9 @@
 import { Key } from "@/models";
 
+/**
+ * Retrieve every API key stored in the database.
+ * @returns A list of {@link Key} records.
+ */
 export const getAllKeys = async (): Promise<Key[]> => {
   try {
     const keys = await Key.findAll();
@@ -10,6 +14,10 @@ export const getAllKeys = async (): Promise<Key[]> => {
   }
 };
 
+/**
+ * Retrieve API keys that are currently marked as active.
+ * @returns A list of active {@link Key} records.
+ */
 export const getAllActiveKeys = async (): Promise<Key[]> => {
   try {
     const keys = await Key.findAll({
@@ -22,6 +30,12 @@ export const getAllActiveKeys = async (): Promise<Key[]> => {
   }
 };
 
+/**
+ * Look up a key by its database identifier.
+ * @param id - Primary key of the key record.
+ * @returns The matching {@link Key} instance.
+ * @throws If the key does not exist.
+ */
 export const getKeyById = async (id: string): Promise<Key> => {
   try {
     const key = await Key.findByPk(id);
@@ -35,6 +49,12 @@ export const getKeyById = async (id: string): Promise<Key> => {
   }
 };
 
+/**
+ * Find the key belonging to a specific merchant.
+ * @param merchantId - The merchant identifier to search for.
+ * @returns The matching {@link Key} instance.
+ * @throws If no key is found for the merchant.
+ */
 export const getKeyByMerchantId = async (merchantId: string): Promise<Key> => {
   try {
     const key = await Key.findOne({
@@ -50,6 +70,11 @@ export const getKeyByMerchantId = async (merchantId: string): Promise<Key> => {
   }
 };
 
+/**
+ * Persist a new key used to authenticate against Shopify.
+ * @param data - Key attributes to store.
+ * @returns The created {@link Key} instance.
+ */
 export const createKey = async (data: {
   merchant_id: string;
   shop_domain: string;

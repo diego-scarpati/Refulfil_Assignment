@@ -1,6 +1,10 @@
 import { OrderItem } from "@/models";
 import type { OrderItemCreatorObject } from "@/utils/types";
 
+/**
+ * Retrieve all order line items from the database.
+ * @returns Array of {@link OrderItem} records.
+ */
 export const getAllOrderItems = async (): Promise<OrderItem[]> => {
   try {
     const orderItems = await OrderItem.findAll();
@@ -11,6 +15,12 @@ export const getAllOrderItems = async (): Promise<OrderItem[]> => {
   }
 };
 
+/**
+ * Fetch line items belonging to a specific order.
+ * @param orderId - Identifier of the order.
+ * @returns All {@link OrderItem} records linked to the order.
+ * @throws If no items are found.
+ */
 export const getOrderItemsByOrderId = async (
   orderId: string
 ): Promise<OrderItem[]> => {
@@ -28,6 +38,11 @@ export const getOrderItemsByOrderId = async (
   }
 };
 
+/**
+ * Persist a new order line item.
+ * @param data - Attributes describing the item.
+ * @returns The created {@link OrderItem} instance.
+ */
 export const createOrderItem = async (data: OrderItemCreatorObject): Promise<OrderItem> => {
   try {
     const newOrderItem = await OrderItem.create({

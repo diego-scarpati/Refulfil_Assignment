@@ -1,6 +1,10 @@
 import type { Request, Response } from "express";
 import { createKey } from "../services/key.services.js";
 
+/**
+ * Create a new API key for a merchant.
+ * Expects all key attributes in the request body.
+ */
 export const createKeyController = async (req: Request, res: Response) => {
   const { merchant_id, shop_domain, api_key, api_secret_key, host_name, access_token } =
     req.body as {

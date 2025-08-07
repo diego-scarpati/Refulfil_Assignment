@@ -1,6 +1,9 @@
 import type { Request, Response } from "express";
 import * as merchantServices from "../services/merchant.services.js";
 
+/**
+ * Return every merchant stored in the database.
+ */
 export const getAllMerchants = async (_req: Request, res: Response) => {
   try {
     const merchants = await merchantServices.getAllMerchants();
@@ -11,6 +14,9 @@ export const getAllMerchants = async (_req: Request, res: Response) => {
   }
 };
 
+/**
+ * Look up a merchant by its database identifier.
+ */
 export const getMerchantById = async (req: Request, res: Response) => {
   const { id } = req.params as { id: string };
   try {
@@ -22,6 +28,9 @@ export const getMerchantById = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Retrieve a merchant using its Shopify ID.
+ */
 export const getMerchantByShopifyId = async (req: Request, res: Response) => {
   const { shopifyId } = req.params as { shopifyId: string };
   try {
@@ -33,6 +42,9 @@ export const getMerchantByShopifyId = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Persist a new merchant record.
+ */
 export const createMerchant = async (req: Request, res: Response) => {
   const { name, shopifyId } = req.body as { name: string; shopifyId: string };
   try {
@@ -47,6 +59,9 @@ export const createMerchant = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Compute GMV/AOV for a merchant, optionally within a date range.
+ */
 export const getMerchantGMV = async (req: Request, res: Response) => {
   const { id } = req.params as { id: string };
   const { startDate, endDate } = req.query as {
@@ -71,6 +86,9 @@ export const getMerchantGMV = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Aggregate GMV/AOV across all merchants, optionally filtered by date.
+ */
 export const getAllGMV = async (req: Request, res: Response) => {
   const { startDate, endDate } = req.query as {
     startDate?: string;
@@ -93,6 +111,9 @@ export const getAllGMV = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * List each merchant with its GMV and AOV metrics.
+ */
 export const getAllMerchantsWithGMV = async (_req: Request, res: Response) => {
   try {
     const merchants = await merchantServices.getAllMerchantsWithGMV();
